@@ -1,0 +1,171 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 1280px;
+    height: 1024px;
+    margin: 0;
+    display: flex;
+}
+
+main {
+    width: 67%;
+    height: 100%;
+    border: 1px solid #000000;
+    display: flex;
+    flex-direction: column;
+}
+
+aside {
+    width: 33%;
+    height: 100%;
+    border: 1px solid #000000;
+    display: flex;
+    flex-direction: column;
+}
+
+aside header {
+    border: 1px solid #000000;
+    display: flex;
+    flex-direction: column;
+}
+
+aside h2 {
+    border: 1px solid #000000;
+    margin: 0;
+    font-size: inherit;
+}
+
+.order-summary-box {
+    border: 1px solid #000000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-number {
+    border: 1px solid #000000;
+}
+
+.order-total {
+    border: 1px solid #000000;
+}
+
+.order-total h3 {
+    border: 1px solid #000000;
+    margin: 0;
+    font-size: inherit;
+}
+
+.order-total h1 {
+    border: 1px solid #000000;
+    margin: 0;
+    font-size: inherit;
+}
+
+.aside-actions {
+    border: 1px solid #000000;
+    display: flex;
+    justify-content: space-between;
+}
+
+.aside-btn {
+    border: 1px solid #000000;
+    background: none;
+}
+
+aside section {
+    border: 1px solid #000000;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+aside h3 {
+    border: 1px solid #000000;
+    margin: 0;
+    font-size: inherit;
+    text-align: center;
+}
+
+.cart-list {
+    border: 1px solid #000000;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-item {
+    border: 1px solid #000000;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+}
+
+.item-qty {
+    border: 1px solid #000000;
+}
+
+.item-desc {
+    border: 1px solid #000000;
+    text-align: center;
+}
+
+.item-cost {
+    border: 1px solid #000000;
+    text-align: right;
+}
+
+nav {
+    border: 1px solid #000000;
+    display: flex;
+    align-items: center;
+}
+
+header {
+    border: 1px solid #000000;
+    display: flex;
+    align-items: center;
+}
+
+h1 {
+    border: 1px solid #000000;
+    font-size: inherit;
+    margin: 0;
+}
+
+section {
+    width: 100%;
+    border: 1px solid #ff0000;
+    flex-grow: 1;
+}
+
+.footer {
+    border: 1px solid #000000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    border: 1px solid #000000;
+    background: none;
+}
+
+.bottone {
+    width: 205px;
+    height: 120px;
+}
+
+#products-container table {
+    width: 100%;
+    border: 1px solid #000000;
+    border-collapse: collapse;
+}
+
+#products-container td {
+    border: 1px solid #000000;
+}
