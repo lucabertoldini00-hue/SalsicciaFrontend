@@ -13,6 +13,90 @@ $but_x_col = BOT_X_COL;
 $bot_width = BOT_WIDTH;
 $bot_height = BOT_HEIGHT;
 
+// Azioni del riepilogo
+
+gestisciAzioni();
+
+function gestisciAzioni()
+{
+    global $mysqli, $id_cassa, $HTTP_GET_VARS;
+
+    if (isset($HTTP_GET_VARS['action']))
+    {
+        $action = $HTTP_GET_VARS['action'];
+    }
+    else
+    {
+        $action = '';
+    }
+
+    if ($action == 'r') // annulla ordine
+    {
+        $query = "SELECT id_ordine FROM ordini WHERE id_cassa = $id_cassa AND chiuso = '0'";
+        $ris = mysql_query_safe($mysqli, $query);
+        if (mysqli_num_rows($ris) == 1)
+        {
+            $id_ordine = mysqli_fetch_array($ris);
+            $id_ordine = $id_ordine['id_ordine'];
+            $query = "DELETE FROM ordini WHERE id_ordine = $id_ordine AND id_cassa = $id_cassa AND chiuso = '0'";
+            mysql_query_safe($mysqli, $query);
+            $query = "DELETE FROM righe_ordini WHERE id_ordine = $id_ordine";
+            mysql_query_safe($mysqli, $query);
+        }
+    }
+
+    if ($action == 'a' && isset($HTTP_GET_VARS['id'])) // aggiungi prodotto
+    {
+        $id_prodotto = (int)$HTTP_GET_VARS['id'];
+
+        $query = "SELECT * FROM ordini WHERE id_cassa = $id_cassa AND chiuso = '0'";
+        $ris = mysql_query_safe($mysqli, $query);
+
+        if (mysqli_num_rows($ris) == 1)
+        {
+            //Ordine esiste recupero id_ordine
+            $id_ordine = mysqli_fetch_array($ris);
+            $id_ordine = $id_ordine['id_ordine'];
+
+            $query = "SELECT * FROM righe_ordini WHERE id_ordine = $id_ordine AND id_prodotto = $id_prodotto";
+            $ris = mysql_query_safe($mysqli, $query);
+
+            if (mysqli_num_rows($ris) == 1)
+            {
+                //prodotto già presente incrementa
+                $query = "UPDATE righe_ordini SET quantita = quantita + 1 WHERE id_ordine = $id_ordine AND id_prodotto = $id_prodotto";
+                mysql_query_safe($mysqli, $query);
+            }
+            else
+            {
+                // Nuovo prodotto inserimento riga
+                $query = "SELECT * FROM prodotti WHERE id_prodotto = $id_prodotto";
+                $ris = mysql_query_safe($mysqli, $query);
+                $prodotto = mysqli_fetch_array($ris);
+                $query = "INSERT INTO righe_ordini (id_ordine, id_prodotto, quantita, totale) VALUES ($id_ordine, '$prodotto[id_prodotto]', '1', $prodotto[prezzo])";
+                mysql_query_safe($mysqli, $query);
+            }
+        }
+        else
+        {
+            // Nessun ordine aperto, creo uno nuovo
+            $query = "INSERT INTO ordini (data_ora, tipo, totale, n_pezzi, id_cassa, chiuso, num_biglietti) VALUES (NOW(), 'nor', '0', '0', $id_cassa, '0', 0)";
+            mysql_query_safe($mysqli, $query);
+            $id_ordine = mysqli_insert_id($mysqli);
+
+            $query = "SELECT * FROM prodotti WHERE id_prodotto = $id_prodotto";
+            $ris = mysql_query_safe($mysqli, $query);
+            $prodotto = mysqli_fetch_array($ris);
+            $query = "INSERT INTO righe_ordini (id_ordine, id_prodotto, quantita, totale) VALUES ($id_ordine, '$prodotto[id_prodotto]', '1', $prodotto[prezzo])";
+            mysql_query_safe($mysqli, $query);
+        }
+
+        // ricalcolo ordine
+        calcolaTotali($id_prodotto, $id_ordine, $mysqli);
+    }
+}
+
+// === NAV: pulsanti categorie ===
 function mostraNavCategorie()
 {
     global $mysqli, $cat;
@@ -30,6 +114,7 @@ function mostraNavCategorie()
     }
 }
 
+//Categoria corrente
 function mostraTitolo()
 {
     global $mysqli, $cat;
@@ -47,6 +132,7 @@ function mostraTitolo()
     }
 }
 
+// tabella prodotti
 function mostraTabellaProdotti()
 {
     global $mysqli, $cat, $but_x_row, $but_x_col;
@@ -82,6 +168,7 @@ function mostraTabellaProdotti()
 
     echo '<table><tbody><tr>';
 
+    // griglia bottoni
     $control = $riga['posizione'];
     for ($i = 1; $i <= $but_x_pag; $i++)
     {
@@ -91,7 +178,7 @@ function mostraTabellaProdotti()
             $desc = strtoupper($riga['descrizione_prod']);
             $id_prodotto = $riga['id_prodotto'];
             echo "<td class=\"td_bottone\">
-                    <button class=\"bottone\" onclick=\"parent.riepilogo.location.href='riepilogo.php?id={$id_prodotto}&prezzo={$riga['prezzo']}&action=a'\">
+                    <button class=\"bottone\" onclick=\"location.href='?cat={$cat}&action=a&id={$id_prodotto}'\">
                       {$desc}<br><b>&euro; {$prezzo}</b>
                     </button>
                   </td>";
@@ -103,18 +190,22 @@ function mostraTabellaProdotti()
         {
             echo '<td class="td_bottone">&nbsp;</td>';
         }
+        // Vai a capo dopo but_x_col colonne
         if ($i % $but_x_col == 0 && $i < $but_x_pag)
             echo "</tr><tr>";
     }
     echo '</tr></tbody></table>';
 }
 
+// Pulsanti annulla ordine e stampa
 function mostraFooterBottoni()
 {
-    echo '<button id="annulla-btn" onclick="parent.riepilogo.location.href=\'riepilogo.php?action=r\'"><span id="annullaOrdine-sign">🗑️️ ANNULLA ORDINE</span></button>
+    global $cat;
+    echo '<button id="annulla-btn" onclick="location.href=\'?cat=' . $cat . '&action=r\'"><span id="annullaOrdine-sign">🗑️️ ANNULLA ORDINE</span></button>
           <button id="stampa-btn" onclick="location.href=\'stampa.php\'"><span id="stampa-sign">🖨️ STAMPA</span></button>';
 }
 
+//R iepilogo ordine
 function mostraBoxRiepilogo()
 {
     global $mysqli;
@@ -143,12 +234,14 @@ function mostraBoxRiepilogo()
     }
 }
 
+// pulsanti modifica e opzioni
 function mostraAzioniLaterali()
 {
     echo '<button class="aside-btn" onclick="parent.centro.location.href=\'modifica.php\'">🖊️ Modifica Ordine</button>
           <button class="aside-btn" onclick="parent.centro.location.href=\'options.php\'">⚙️ Opzioni</button>';
 }
 
+// elenco prodotti ordine
 function mostraListaProdotti()
 {
     global $mysqli;
