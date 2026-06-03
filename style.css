@@ -48,7 +48,7 @@ nav button {
     font-size: 14px;
 }
 
-nav button:first-child {
+nav button.attivo {
     background-color: #e5e6eb;
 }
 
