@@ -42,10 +42,11 @@ nav button {
     border: 1px solid #dcdfe6;
     border-radius: 4px;
     padding: 12px 24px;
-    font-weight: bold;
     color: #2c3e4f;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
 }
 
 nav button.attivo {
@@ -59,13 +60,14 @@ header {
 }
 
 h1 {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 1800;
     color: #2b3d4e;
     margin: 0;
     padding-bottom: 8px;
     border-bottom: 4px solid #2b3d4e;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 section {
@@ -105,7 +107,7 @@ button {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
     color: #2b3d4e;
     font-family: inherit;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     line-height: 1.4;
     text-align: center;
@@ -123,7 +125,7 @@ button {
 }
 
 .bottone br + b {
-    font-size: 16px;
+    font-size: 26px;
     margin-top: 4px;
     display: inline-block;
 }
@@ -147,6 +149,14 @@ button {
     transition: opacity 0.15s ease;
 }
 
+#continua-btn {
+    background-color: #2db85c;
+    border-radius: 6px;
+    padding: 14px 28px;
+    font-weight: bold;
+    transition: opacity 0.15s ease;
+}
+
 #stampa-btn {
     background-color: #2c3e4f;
     border-radius: 6px;
@@ -156,11 +166,13 @@ button {
 }
 
 #annulla-btn:hover,
+#continua-btn:hover,
 #stampa-btn:hover {
     opacity: 0.9;
 }
 
 #annullaOrdine-sign,
+#continua-sign,
 #stampa-sign {
     color: #ffffff;
     font-size: 14px;
@@ -306,8 +318,8 @@ aside h3 {
 }
 
 h1.item-cost {
-    font-size: 13px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 800;
     color: #2b3d4e;
     text-align: right;
     margin-top: 20px;
@@ -318,4 +330,157 @@ span.item-cost {
     font-weight: bold;
     color: #2b3d4e;
     text-align: right;
+}
+
+.modifica-section {
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.modifica-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.modifica-table th {
+    font-size: 13px;
+    font-weight: 800;
+    color: #8c9ba5;
+    text-transform: uppercase;
+    padding-bottom: 20px;
+    letter-spacing: 0.5px;
+}
+
+.intestazione-tabella-descrizione {
+    text-align: left;
+    width: 40%;
+}
+
+.intestazione-tabella-quantita {
+    text-align: center;
+    width: 25%;
+}
+
+.intestazione-tabella-prezzo {
+    text-align: left;
+    width: 20%;
+    padding-left: 20px;
+}
+
+.intestazione-tabella-azioni {
+    text-align: center;
+    width: 15%;
+}
+
+.modifica-table td {
+    padding: 10px 0;
+    vertical-align: middle;
+}
+
+.cella-tabella-descrizione {
+    font-size: 20px;
+    font-weight: 800;
+    color: #2b3d4e;
+    text-transform: uppercase;
+}
+
+.cella-tabella-quantita {
+    text-align: center;
+}
+
+.contenitore-qta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bottone-qta {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid #dcdfe6;
+    background-color: #f7f7f8;
+    color: #2b3d4e;
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: background-color 0.15s, transform 0.1s;
+}
+
+.bottone-qta:hover {
+    background-color: #e5e6eb;
+}
+
+.bottone-qta:active {
+    transform: scale(0.95);
+}
+
+.input-qta {
+    width: 52px;
+    height: 44px;
+    border: 1px solid #dcdfe6;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #2b3d4e;
+    font-size: 20px;
+    font-weight: 800;
+    text-align: center;
+    outline: none;
+}
+
+.cella-tabella-prezzo {
+    font-size: 20px;
+    font-weight: 800;
+    color: #2b3d4e;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.cella-tabella-azioni {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.action-btn {
+    width: 52px;
+    height: 44px;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+.action-check {
+    background-color: #e5e6eb;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    color: #2b3d4e;
+}
+
+.action-check:hover {
+    background-color: #dcdfe6;
+}
+
+.action-delete {
+    background-color: #e54b3c;
+    color: #ffffff;
+    border: none;
+}
+
+.action-delete:hover {
+    opacity: 0.9;
 }

@@ -96,7 +96,7 @@ function gestisciAzioni()
     }
 }
 
-// === NAV: pulsanti categorie ===
+// pulsanti categorie
 function mostraNavCategorie()
 {
     global $mysqli, $cat;
