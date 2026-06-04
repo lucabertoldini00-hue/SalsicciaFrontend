@@ -94,6 +94,48 @@ function gestisciAzioni()
         // ricalcolo ordine
         calcolaTotali($id_prodotto, $id_ordine, $mysqli);
     }
+
+    if ($action == 'mq' && isset($HTTP_GET_VARS['id']) && isset($HTTP_GET_VARS['qta']))
+    {
+        $id_prodotto = (int)$HTTP_GET_VARS['id'];
+        $qta = (int)$HTTP_GET_VARS['qta'];
+
+        if ($qta > 0)
+        {
+            $query = "SELECT id_ordine FROM ordini WHERE id_cassa = $id_cassa AND chiuso = '0'";
+            $ris = mysql_query_safe($mysqli, $query);
+            if (mysqli_num_rows($ris) == 1)
+            {
+                $riga = mysqli_fetch_array($ris);
+                $id_ordine = $riga['id_ordine'];
+                $query = "UPDATE righe_ordini SET quantita = $qta WHERE id_ordine = $id_ordine AND id_prodotto = $id_prodotto";
+                mysql_query_safe($mysqli, $query);
+                calcolaTotali($id_prodotto, $id_ordine, $mysqli);
+            }
+        }
+
+        header("Location: ?action=m");
+        exit;
+    }
+
+    if ($action == 'mr' && isset($HTTP_GET_VARS['id']))
+    {
+        $id_prodotto = (int)$HTTP_GET_VARS['id'];
+
+        $query = "SELECT id_ordine FROM ordini WHERE id_cassa = $id_cassa AND chiuso = '0'";
+        $ris = mysql_query_safe($mysqli, $query);
+        if (mysqli_num_rows($ris) == 1)
+        {
+            $riga = mysqli_fetch_array($ris);
+            $id_ordine = $riga['id_ordine'];
+            $query = "DELETE FROM righe_ordini WHERE id_ordine = $id_ordine AND id_prodotto = $id_prodotto";
+            mysql_query_safe($mysqli, $query);
+            calcolaTotali($id_prodotto, $id_ordine, $mysqli);
+        }
+
+        header("Location: ?action=m");
+        exit;
+    }
 }
 
 // pulsanti categorie
@@ -197,6 +239,74 @@ function mostraTabellaProdotti()
     echo '</tr></tbody></table>';
 }
 
+//Modifica ordine
+function mostraModificaOrdine()
+{
+    global $mysqli;
+    $id_cassa = ID_CASSA;
+
+    $query = "SELECT prodotti.id_prodotto AS id, prodotti.descrizione_prod, righe_ordini.quantita, righe_ordini.totale, ordini.totale as tot_ord, ordini.id_ordine AS id_ord FROM prodotti, ordini, righe_ordini WHERE ordini.id_ordine = righe_ordini.id_ordine AND prodotti.id_prodotto = righe_ordini.id_prodotto AND id_cassa = $id_cassa AND ordini.chiuso = 0";
+    $ris = mysql_query_safe($mysqli, $query);
+
+    echo '<section class="modifica-section">';
+
+    if (mysqli_num_rows($ris) > 0)
+    {
+        echo '<table class="modifica-table">';
+        echo '<thead><tr>';
+        echo '<th class="intestazione-tabella-descrizione">DESCRIZIONE</th>';
+        echo '<th class="intestazione-tabella-quantita">Q.TÀ</th>';
+        echo '<th class="intestazione-tabella-prezzo">COSTO UNITARIO</th>';
+        echo '<th class="intestazione-tabella-azioni">AZIONI</th>';
+        echo '</tr></thead>';
+        echo '<tbody>';
+
+        while ($riga = mysqli_fetch_array($ris))
+        {
+            $desc = strtoupper($riga['descrizione_prod']);
+            $prezzo_unitario = $riga['quantita'] > 0 ? number_format($riga['totale'] / $riga['quantita'], 2, ',', '.') : '0,00';
+            $qta = $riga['quantita'];
+
+            echo '<tr>';
+            echo "<td class=\"cella-tabella-descrizione\">{$desc}</td>";
+            echo '<td class="cella-tabella-quantita">';
+            echo '<div class="contenitore-qta">';
+            if ($qta > 1)
+                echo "<a href=\"?action=mq&id={$riga['id']}&qta=" . ($qta - 1) . "\" class=\"bottone-qta bottone-qta-meno\" style=\"text-decoration:none\">−</a>";
+            else
+                echo "<span class=\"bottone-qta bottone-qta-meno\" style=\"opacity:0.3;cursor:default\">−</span>";
+            echo "<span class=\"input-qta\" style=\"display:inline-flex;align-items:center;justify-content:center\">{$qta}</span>";
+            echo "<a href=\"?action=mq&id={$riga['id']}&qta=" . ($qta + 1) . "\" class=\"bottone-qta bottone-qta-piu\" style=\"text-decoration:none\">+</a>";
+            echo '</div>';
+            echo '</td>';
+            echo "<td class=\"cella-tabella-prezzo\">€ {$prezzo_unitario}</td>";
+            echo '<td class="cella-tabella-azioni">';
+            echo "<a href=\"?action=m\" class=\"action-btn action-check\" style=\"text-decoration:none\">✓</a>";
+            echo "<a href=\"?action=mr&id={$riga['id']}\" class=\"action-btn action-delete\" style=\"text-decoration:none\">✕</a>";
+            echo '</td>';
+            echo '</tr>';
+        }
+
+        echo '</tbody>';
+        echo '</table>';
+    }
+    else
+    {
+        echo '<p style="text-align:center;margin-top:40px;font-size:18px;color:#8c9ba5;">Nessun prodotto nell\'ordine</p>';
+    }
+
+    echo '</section>';
+}
+
+// Footer modifica
+function mostraFooterModifica()
+{
+    global $cat;
+    echo '<a href="?cat=' . $cat . '&action=r" id="annulla-btn" style="text-decoration:none"><span id="annullaOrdine-sign">🗑️️ ANNULLA ORDINE</span></a>
+          <a href="index.php" id="continua-btn" style="text-decoration:none"><span id="continua-sign">🛒 CONTINUA ORDINE</span></a>
+          <a href="stampa.php" id="stampa-btn" style="text-decoration:none"><span id="stampa-sign">🖨️ STAMPA</span></a>';
+}
+
 // Pulsanti annulla ordine e stampa
 function mostraFooterBottoni()
 {
@@ -237,8 +347,8 @@ function mostraBoxRiepilogo()
 // pulsanti modifica e opzioni
 function mostraAzioniLaterali()
 {
-    echo '<button class="aside-btn" onclick="parent.centro.location.href=\'modifica.php\'">🖊️ Modifica Ordine</button>
-          <button class="aside-btn" onclick="parent.centro.location.href=\'options.php\'">⚙️ Opzioni</button>';
+    echo '<button class="aside-btn" onclick="location.href=\'?action=m\'">🖊️ Modifica Ordine</button>
+          <button class="aside-btn" onclick="location.href=\'options.php\'">⚙️ Opzioni</button>';
 }
 
 // elenco prodotti ordine

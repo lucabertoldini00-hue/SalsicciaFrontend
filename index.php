@@ -1,4 +1,5 @@
 <?php require_once 'functionsFrontend.inc'; ?>
+<?php $showModifica = isset($_GET['action']) && $_GET['action'] == 'm'; ?>
 
 <!DOCTYPE html>
 <html>
@@ -10,10 +11,17 @@
 </head>
 <body>
     <main>
-        <nav><?php mostraNavCategorie(); ?></nav>
-        <header><h1><?php mostraTitolo(); ?></h1></header>
-        <section id="main"><?php mostraTabellaProdotti(); ?></section>
-        <div class="footer"><?php mostraFooterBottoni(); ?></div>
+        <?php if ($showModifica): ?>
+            <nav><?php mostraNavCategorie(); ?></nav>
+            <header><h1>MODIFICA ORDINE</h1></header>
+            <?php mostraModificaOrdine(); ?>
+            <div class="footer"><?php mostraFooterModifica(); ?></div>
+        <?php else: ?>
+            <nav><?php mostraNavCategorie(); ?></nav>
+            <header><h1><?php mostraTitolo(); ?></h1></header>
+            <section id="main"><?php mostraTabellaProdotti(); ?></section>
+            <div class="footer"><?php mostraFooterBottoni(); ?></div>
+        <?php endif; ?>
     </main>
     <aside>
         <header>
