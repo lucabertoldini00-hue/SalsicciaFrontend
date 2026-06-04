@@ -1,5 +1,9 @@
 <?php require_once 'functionsFrontend.inc'; ?>
-<?php $showModifica = isset($_GET['action']) && $_GET['action'] == 'm'; ?>
+<?php
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+$showModifica = $action == 'm';
+$showOpzioni = $action == 'o';
+?>
 
 <!DOCTYPE html>
 <html>
@@ -12,12 +16,17 @@
 <body>
     <main>
         <?php if ($showModifica): ?>
-            <nav><?php mostraNavCategorie(); ?></nav>
+            <nav><?php mostraNavCategorie(); ?><?php mostraIndicatoreTipo(); ?></nav>
             <header><h1>MODIFICA ORDINE</h1></header>
             <?php mostraModificaOrdine(); ?>
             <div class="footer"><?php mostraFooterModifica(); ?></div>
+        <?php elseif ($showOpzioni): ?>
+            <nav><?php mostraNavCategorie(); ?><?php mostraIndicatoreTipo(); ?></nav>
+            <header><h1>TIPOLOGIA ORDINE</h1></header>
+            <?php mostraOpzioni(); ?>
+            <div class="footer"><?php mostraFooterModifica(); ?></div>
         <?php else: ?>
-            <nav><?php mostraNavCategorie(); ?></nav>
+            <nav><?php mostraNavCategorie(); ?><?php mostraIndicatoreTipo(); ?></nav>
             <header><h1><?php mostraTitolo(); ?></h1></header>
             <section id="main"><?php mostraTabellaProdotti(); ?></section>
             <div class="footer"><?php mostraFooterBottoni(); ?></div>

@@ -484,3 +484,60 @@ span.item-cost {
 .action-delete:hover {
     opacity: 0.9;
 }
+
+.opzioni-section {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.opzioni-row-1 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    width: 100%;
+}
+
+.opzioni-row-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.opzione-btn {
+    background-color: #f7f7f8;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 8px;
+    color: #2b3d4e;
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.opzione-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+}
+
+.opzione-btn:active {
+    transform: translateY(0);
+}
+
+.opzione-btn-large {
+    width: 320px;
+    padding: 24px;
+}

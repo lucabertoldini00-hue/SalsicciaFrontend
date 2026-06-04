@@ -136,6 +136,34 @@ function gestisciAzioni()
         header("Location: ?action=m");
         exit;
     }
+
+    if ($action == 'st' && isset($HTTP_GET_VARS['t']))
+    {
+        $tipo = $HTTP_GET_VARS['t'];
+        $validi = array('nor', 'pre', 'mus', 'stf', 'asp');
+
+        if (in_array($tipo, $validi))
+        {
+            $query = "SELECT id_ordine FROM ordini WHERE id_cassa = $id_cassa AND chiuso = '0'";
+            $ris = mysql_query_safe($mysqli, $query);
+
+            if (mysqli_num_rows($ris) == 1)
+            {
+                $riga = mysqli_fetch_array($ris);
+                $id_ordine = $riga['id_ordine'];
+                $query = "UPDATE ordini SET tipo = '$tipo' WHERE id_ordine = $id_ordine";
+                mysql_query_safe($mysqli, $query);
+            }
+            else
+            {
+                $query = "INSERT INTO ordini (data_ora, tipo, totale, n_pezzi, id_cassa, chiuso, num_biglietti) VALUES (NOW(), '$tipo', '0', '0', $id_cassa, '0', 0)";
+                mysql_query_safe($mysqli, $query);
+            }
+        }
+
+        header("Location: ?action=o");
+        exit;
+    }
 }
 
 // pulsanti categorie
@@ -171,6 +199,27 @@ function mostraTitolo()
     else
     {
         echo 'SAKE';
+    }
+}
+
+//indicatore tipo ordine nav
+function mostraIndicatoreTipo()
+{
+    global $mysqli;
+    $id_cassa = ID_CASSA;
+
+    $query = "SELECT tipo FROM ordini WHERE id_cassa = $id_cassa AND chiuso = '0' LIMIT 1";
+    $ris = mysql_query_safe($mysqli, $query);
+
+    if (mysqli_num_rows($ris) > 0)
+    {
+        $riga = mysqli_fetch_array($ris);
+        $tipo = $riga['tipo'];
+
+        $lettere = array('pre' => 'P', 'mus' => 'M', 'stf' => 'S', 'asp' => 'A');
+
+        if (isset($lettere[$tipo]))
+            echo '<span style="color:#e54b3c;font-weight:800;font-size:18px;margin-left:auto;">' . $lettere[$tipo] . '</span>';
     }
 }
 
@@ -307,6 +356,23 @@ function mostraFooterModifica()
           <a href="stampa.php" id="stampa-btn" style="text-decoration:none"><span id="stampa-sign">🖨️ STAMPA</span></a>';
 }
 
+// Schermata opzioni
+function mostraOpzioni()
+{
+    echo '<section class="opzioni-section">';
+    echo '<div class="opzioni-row-1">';
+    echo '<a href="?action=st&t=pre" class="opzione-btn" style="text-decoration:none">PREVENDITA</a>';
+    echo '<a href="?action=st&t=mus" class="opzione-btn" style="text-decoration:none">MUSICISTI</a>';
+    echo '<a href="?action=st&t=stf" class="opzione-btn" style="text-decoration:none">STAFF</a>';
+    echo '<a href="?action=st&t=asp" class="opzione-btn" style="text-decoration:none">ASPORTO</a>';
+    echo '</div>';
+    echo '<div class="opzioni-row-2">';
+    echo '<a href="?action=st&t=nor" class="opzione-btn opzione-btn-large" style="text-decoration:none">NORMALE</a>';
+    echo '<span class="opzione-btn opzione-btn-large" style="opacity:0.5;cursor:default">STAND BY</span>';
+    echo '</div>';
+    echo '</section>';
+}
+
 // Pulsanti annulla ordine e stampa
 function mostraFooterBottoni()
 {
@@ -344,11 +410,11 @@ function mostraBoxRiepilogo()
     }
 }
 
-// pulsanti modifica e opzioni
+//Pulsanti modifica e opzioni
 function mostraAzioniLaterali()
 {
-    echo '<button class="aside-btn" onclick="location.href=\'?action=m\'">🖊️ Modifica Ordine</button>
-          <button class="aside-btn" onclick="location.href=\'options.php\'">⚙️ Opzioni</button>';
+    echo '<a href="?action=m" class="aside-btn" style="text-decoration:none">🖊️ Modifica Ordine</a>
+          <a href="?action=o" class="aside-btn" style="text-decoration:none">⚙️ Opzioni</a>';
 }
 
 // elenco prodotti ordine

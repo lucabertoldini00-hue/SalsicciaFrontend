@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace - Opzioni Ordine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <nav>
+            <button class="attivo"><span id="button-text">SAKE</span></button>
+            <button><span id="button-text"></span> FRUTTATI INVEC.</button>
+            <button> JUNMAI</button>
+        </nav>
+        <header>
+            <h1>TIPOLOGIA ORDINE</h1>
+        </header>
+        <section class="opzioni-section">
+            <div class="opzioni-row-1">
+                <button class="opzione-btn">PREVENDITA</button>
+                <button class="opzione-btn">MUSICISTI</button>
+                <button class="opzione-btn">STAFF</button>
+                <button class="opzione-btn">ASPORTO</button>
+            </div>
+            <div class="opzioni-row-2">
+                <button class="opzione-btn opzione-btn-large">NORMALE</button>
+                <button class="opzione-btn opzione-btn-large">STAND BY</button>
+            </div>
+        </section>
+        <div class="footer">
+            <button id="annulla-btn"><span id="annullaOrdine-sign">🗑️️ ANNULLA ORDINE</span></button>
+            <button id="continua-btn" onclick="location.href='index.html'"><span id="continua-sign">🛒 CONTINUA ORDINE</span></button>
+            <button id="stampa-btn"><span id="stampa-sign">🖨️ STAMPA</span></button>
+        </div>
+    </main>
+    <aside>
+        <header>
+            <h2>RIEPILOGO ORDINE</h2>
+            <div class="order-summary-box">
+                <div class="order-number">ORDINE #246</div>
+                <div class="order-total">
+                    <h3>TOTALE DA PAGARE</h3>
+                    <h1 class="item-cost">€ 12,00</h1>
+                </div>
+            </div>
+            <div class="aside-actions">
+                <button class="aside-btn">🖊️ Modifica Ordine</button>
+                <button class="aside-btn">⚙️ Opzioni</button>
+            </div>
+        </header>
+        <section>
+            <h3>RIEPILOGO PRODOTTI</h3>
+            <ul class="cart-list">
+                <li>
+                    <div class="cart-item">
+                        <span class="item-qty">1</span>
+                        <span class="item-desc">SAKE PREMIUM JUNMAI</span>
+                        <span class="item-cost">€ 3,00</span>
+                    </div>
+                    <div class="cart-item">
+                        <span class="item-qty">1</span>
+                        <span class="item-desc">SAKE PREMIUM JUNMAI</span>
+                        <span class="item-cost">€ 3,00</span>
+                    </div>
+                    <div class="cart-item">
+                        <span class="item-qty">1</span>
+                        <span class="item-desc">SAKE PREMIUM JUNMAI</span>
+                        <span class="item-cost">€ 3,00</span>
+                    </div>
+                    <div class="cart-item">
+                        <span class="item-qty">1</span>
+                        <span class="item-desc">SAKE PREMIUM JUNMAI</span>
+                        <span class="item-cost">€ 3,00</span>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </aside>
+</body>
+</html>
