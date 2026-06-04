@@ -3,6 +3,7 @@
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $showModifica = $action == 'm';
 $showOpzioni = $action == 'o';
+$showConfig = $action == 'c';
 ?>
 
 <!DOCTYPE html>
@@ -38,10 +39,15 @@ $showOpzioni = $action == 'o';
             <div class="order-summary-box"><?php mostraBoxRiepilogo(); ?></div>
             <div class="aside-actions"><?php mostraAzioniLaterali(); ?></div>
         </header>
-        <section>
-            <h3>RIEPILOGO PRODOTTI</h3>
-            <ul class="cart-list"><?php mostraListaProdotti(); ?></ul>
-        </section>
+        <?php if ($showConfig): ?>
+            <section style="flex-grow:1;"><?php mostraPannelloConfig(); ?></section>
+        <?php else: ?>
+            <section>
+                <h3>RIEPILOGO PRODOTTI</h3>
+                <ul class="cart-list"><?php mostraListaProdotti(); ?></ul>
+            </section>
+        <?php endif; ?>
+        <?php mostraAzioniExtra(); ?>
     </aside>
 </body>
 </html>

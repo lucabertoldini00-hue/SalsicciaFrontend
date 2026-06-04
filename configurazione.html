@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace - Configurazione</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <nav>
+            <button class="attivo"><span id="button-text">SAKE</span></button>
+            <button><span id="button-text"></span> FRUTTATI INVEC.</button>
+            <button> JUNMAI</button>
+        </nav>
+        <header>
+            <h1>SAKE</h1>
+        </header>
+        <section id="main">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="td_bottone">
+                            <button class="bottone">
+                                DEGUSTAZIONE 1 SAKE<br>
+                                <b>€ 3,00</b>
+                            </button>
+                        </td>
+                        <td class="td_bottone">
+                            <button class="bottone">
+                                DEGUSTAZIONE 2 SAKE<br>
+                                <b>€ 5,00</b>
+                            </button>
+                        </td>
+                        <td class="td_bottone">
+                            <button class="bottone">
+                                DEGUSTAZIONE 5 SAKE<br>
+                                <b>€ 10,00</b>
+                            </button>
+                        </td>
+                        <td class="td_bottone">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                        <td class="td_bottone">&nbsp;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <div class="footer">
+            <button id="annulla-btn"><span id="annullaOrdine-sign">🗑️️ ANNULLA ORDINE</span></button>
+            <button id="stampa-btn"><span id="stampa-sign">🖨️ STAMPA</span></button>
+        </div>
+    </main>
+    <aside>
+        <header>
+            <h2>RIEPILOGO ORDINE</h2>
+            <div class="order-summary-box">
+                <div class="order-number">ORDINE #261</div>
+                <div class="order-total">
+                    <h3>TOTALE DA PAGARE</h3>
+                    <h1 class="item-cost">€ 0,00</h1>
+                </div>
+            </div>
+            <div class="aside-actions">
+                <button class="aside-btn">🖊️ Modifica Ordine</button>
+                <button class="aside-btn">⚙️ Opzioni</button>
+            </div>
+        </header>
+        
+        <!-- Sezione standard riepilogo prodotti -->
+        <section id="riepilogo-prodotti-section">
+            <h3>RIEPILOGO PRODOTTI</h3>
+            <div class="cart-item">
+                <span class="item-desc">Nessun prodotto nell'ordine</span>
+            </div>
+        </section>
+
+        <!-- Sezione tastierino configurazione (nascosta di default) -->
+        <section id="config-panel" style="display: none; flex-grow: 1;">
+            <h3 style="font-size: 13px; color: #5a6b7c; margin-bottom: 12px; font-weight: 800;">INSERISCI IL CODICE:</h3>
+            <input type="text" id="codice-input" class="codice-text-field" placeholder="----" readonly>
+            
+            <div class="tastierino-grid">
+                <button class="tastierino-btn" onclick="pressKey('1')">1</button>
+                <button class="tastierino-btn" onclick="pressKey('2')">2</button>
+                <button class="tastierino-btn" onclick="pressKey('3')">3</button>
+                <button class="tastierino-btn" onclick="pressKey('4')">4</button>
+                <button class="tastierino-btn" onclick="pressKey('5')">5</button>
+                <button class="tastierino-btn" onclick="pressKey('6')">6</button>
+                <button class="tastierino-btn" onclick="pressKey('7')">7</button>
+                <button class="tastierino-btn" onclick="pressKey('8')">8</button>
+                <button class="tastierino-btn" onclick="pressKey('9')">9</button>
+                <button class="tastierino-btn" onclick="pressKey('*')">*</button>
+                <button class="tastierino-btn" onclick="pressKey('0')">0</button>
+                <button class="tastierino-btn" onclick="pressKey('@')">@</button>
+            </div>
+            
+            <div class="tastierino-actions">
+                <button class="tastierino-action-btn action-ok" onclick="pressOk()">OK</button>
+                <button class="tastierino-action-btn action-canc" onclick="pressCanc()">CANC</button>
+            </div>
+            
+            <button class="tastierino-close-btn" onclick="closeConfig()">CHIUDI</button>
+        </section>
+
+        <div style="margin-top:auto; display:flex; gap:12px; padding-top:20px;">
+            <button class="aside-btn" id="config-btn" onclick="openConfig()">🔧 Configurazione</button>
+            <button class="aside-btn">⏸️ Ordini in standby</button>
+        </div>
+    </aside>
+
+    <script>
+        function openConfig() {
+            document.getElementById('riepilogo-prodotti-section').style.display = 'none';
+            document.getElementById('config-panel').style.display = 'block';
+            document.getElementById('codice-input').value = '';
+        }
+
+        function closeConfig() {
+            document.getElementById('riepilogo-prodotti-section').style.display = 'block';
+            document.getElementById('config-panel').style.display = 'none';
+            document.getElementById('codice-input').value = '';
+        }
+
+        function pressKey(key) {
+            var input = document.getElementById('codice-input');
+            input.value += key;
+        }
+
+        function pressCanc() {
+            var input = document.getElementById('codice-input');
+            input.value = ''; // clears the input field
+        }
+
+        function pressOk() {
+            var input = document.getElementById('codice-input');
+            if(input.value) {
+                alert('Codice inserito: ' + input.value);
+            } else {
+                alert('Inserisci un codice prima di premere OK');
+            }
+        }
+    </script>
+</body>
+</html>

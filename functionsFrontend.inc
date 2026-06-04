@@ -451,3 +451,37 @@ function mostraListaProdotti()
         echo '<li><div class="cart-item"><span class="item-desc">Nessun prodotto nell\'ordine</span></div></li>';
     }
 }
+
+//pulsanti fondo aside
+function mostraAzioniExtra()
+{
+    echo '<div style="margin-top:auto;display:flex;gap:12px;padding-top:20px;">';
+    echo '<a href="?action=c" class="aside-btn" style="text-decoration:none">🔧 Configurazione</a>';
+    echo '<a href="?action=standby" class="aside-btn" style="text-decoration:none">⏸️ Ordini in standby</a>';
+    echo '</div>';
+}
+
+// Pannello configurazione con tastierino
+function mostraPannelloConfig()
+{
+    $code = isset($_GET['code']) ? $_GET['code'] : '';
+    $encodedCode = urlencode($code);
+
+    echo '<h3 style="font-size:13px;color:#5a6b7c;margin-bottom:12px;font-weight:800;">INSERISCI IL CODICE:</h3>';
+    echo '<input type="password" class="codice-text-field" value="' . htmlspecialchars($code) . '" readonly>';
+
+    echo '<div class="tastierino-grid">';
+    for ($i = 1; $i <= 9; $i++)
+        echo '<a href="?action=c&code=' . $encodedCode . $i . '" class="tastierino-btn" style="text-decoration:none">' . $i . '</a>';
+    echo '<a href="?action=c&code=' . $encodedCode . '*" class="tastierino-btn" style="text-decoration:none">*</a>';
+    echo '<a href="?action=c&code=' . $encodedCode . '0" class="tastierino-btn" style="text-decoration:none">0</a>';
+    echo '<a href="?action=c&code=' . $encodedCode . '@" class="tastierino-btn" style="text-decoration:none">@</a>';
+    echo '</div>';
+
+    echo '<div class="tastierino-actions">';
+    echo '<a href="?action=c&ok=1&code=' . $encodedCode . '" class="tastierino-action-btn action-ok" style="text-decoration:none;display:flex;align-items:center;justify-content:center">OK</a>';
+    echo '<a href="?action=c" class="tastierino-action-btn action-canc" style="text-decoration:none;display:flex;align-items:center;justify-content:center">CANC</a>';
+    echo '</div>';
+
+    echo '<a href="index.php" class="tastierino-close-btn" style="text-decoration:none;display:flex;align-items:center;justify-content:center">CHIUDI</a>';
+}
