@@ -642,3 +642,252 @@ span.item-cost {
 .tastierino-close-btn:active {
     transform: scale(0.98);
 }
+
+.admin-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.admin-group-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #8c9ba5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+    margin: 0 0 10px 0;
+}
+
+.admin-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.admin-btn-row .opzione-btn {
+    text-decoration: none;
+    padding: 16px 20px;
+}
+
+.opzione-btn.danger {
+    color: #e54b3c;
+}
+
+.stampa-header h1 {
+    font-size: 24px;
+    font-weight: 900;
+    color: #2b3d4e;
+    margin: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    letter-spacing: 0.3px;
+}
+
+.stampa-section {
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.gruppo-titolo {
+    font-size: 13px;
+    font-weight: 800;
+    color: #5a6b7c;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.banconote-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.banconota-btn {
+    width: 100px;
+    height: 72px;
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 4px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    text-decoration: none;
+}
+
+.banconota-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.banconota-btn .valore {
+    font-size: 12px;
+    font-weight: 800;
+    color: #2b3d4e;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 1px 6px;
+    border-radius: 3px;
+}
+
+.monete-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.moneta-btn {
+    width: 80px;
+    height: 80px;
+    background-color: #c9956a;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    text-decoration: none;
+}
+
+.moneta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.moneta-btn .valore {
+    font-size: 14px;
+    font-weight: 800;
+    color: #5a4a20;
+    text-shadow: 0 0 4px rgba(255,255,255,0.8);
+}
+
+.metodo-titolo {
+    font-size: 13px;
+    font-weight: 800;
+    color: #5a6b7c;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.metodo-grid {
+    display: flex;
+    gap: 16px;
+}
+
+.metodo-btn {
+    flex: 1;
+    background-color: #ffffff;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    text-decoration: none;
+}
+
+.metodo-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+}
+
+.metodo-btn.attivo {
+    border-color: #2b3d4e;
+    background-color: #f0f2f5;
+}
+
+.metodo-btn .metodo-btn-icona {
+    font-size: 28px;
+}
+
+.metodo-btn .metodo-btn-label {
+    font-size: 14px;
+    font-weight: 800;
+    color: #2b3d4e;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stampa-footer {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #dcdfe6;
+}
+
+.stampa-footer-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stampa-footer-campo label {
+    font-size: 13px;
+    font-weight: 800;
+    color: #8c9ba5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stampa-footer-campo .stampa-valore {
+    width: 120px;
+    height: 54px;
+    border: 1px solid #dcdfe6;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #2b3d4e;
+    font-size: 22px;
+    font-weight: 800;
+    text-align: center;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stampa-footer-spacer {
+    flex-grow: 1;
+}
+
+.stampa-close-btn {
+    width: 56px;
+    height: 54px;
+    background-color: #e54b3c;
+    border: none;
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.15s, transform 0.1s;
+    text-decoration: none;
+}
+
+.stampa-close-btn:hover {
+    opacity: 0.9;
+}
+
+.stampa-close-btn:active {
+    transform: scale(0.95);
+}

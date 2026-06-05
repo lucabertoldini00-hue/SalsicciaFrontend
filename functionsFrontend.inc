@@ -353,7 +353,7 @@ function mostraFooterModifica()
     global $cat;
     echo '<a href="?cat=' . $cat . '&action=r" id="annulla-btn" style="text-decoration:none"><span id="annullaOrdine-sign">🗑️️ ANNULLA ORDINE</span></a>
           <a href="index.php" id="continua-btn" style="text-decoration:none"><span id="continua-sign">🛒 CONTINUA ORDINE</span></a>
-          <a href="stampa.php" id="stampa-btn" style="text-decoration:none"><span id="stampa-sign">🖨️ STAMPA</span></a>';
+          <a href="?action=s" id="stampa-btn" style="text-decoration:none"><span id="stampa-sign">🖨️ STAMPA</span></a>';
 }
 
 // Schermata opzioni
@@ -378,7 +378,7 @@ function mostraFooterBottoni()
 {
     global $cat;
     echo '<button id="annulla-btn" onclick="location.href=\'?cat=' . $cat . '&action=r\'"><span id="annullaOrdine-sign">🗑️️ ANNULLA ORDINE</span></button>
-          <button id="stampa-btn" onclick="location.href=\'stampa.php\'"><span id="stampa-sign">🖨️ STAMPA</span></button>';
+           <button id="stampa-btn" onclick="location.href=\'?action=s\'"><span id="stampa-sign">🖨️ STAMPA</span></button>';
 }
 
 //R iepilogo ordine
@@ -484,4 +484,154 @@ function mostraPannelloConfig()
     echo '</div>';
 
     echo '<a href="index.php" class="tastierino-close-btn" style="text-decoration:none;display:flex;align-items:center;justify-content:center">CHIUDI</a>';
+}
+
+//Pannello admin
+function mostraPannelloAdmin()
+{
+    echo '<section class="admin-panel">';
+
+    echo '<div>';
+    echo '<h3 class="admin-group-title">GESTIONE</h3>';
+    echo '<div class="admin-btn-row">';
+    echo '<a href="gestione_prodotti.php" class="opzione-btn">GESTIONE PRODOTTI</a>';
+    echo '<a href="modifica_info.php" class="opzione-btn">MODIFICA INFO</a>';
+    echo '<a href="ripristina_db.php" class="opzione-btn">RIPRISTINA DB</a>';
+    echo '</div>';
+    echo '</div>';
+
+    echo '<div>';
+    echo '<h3 class="admin-group-title">CONTATORI</h3>';
+    echo '<div class="admin-btn-row">';
+    echo '<a href="bocc.php" class="opzione-btn">BOCC</a>';
+    echo '</div>';
+    echo '</div>';
+
+    echo '<div>';
+    echo '<h3 class="admin-group-title">AMMINISTRAZIONE</h3>';
+    echo '<div class="admin-btn-row">';
+    echo '<a href="print_reset.php" class="opzione-btn">PRINT RESET</a>';
+    echo '<a href="hp_lj_setup.php" class="opzione-btn">HP LJ SETUP</a>';
+    echo '<a href="?action=restart" class="opzione-btn danger">RIAVVIA</a>';
+    echo '<a href="?action=shutdown" class="opzione-btn danger">SPEGNI</a>';
+    echo '<a href="stampe_cucina.php" class="opzione-btn">STAMPE CUCINA</a>';
+    echo '<a href="stampa_parz.php" class="opzione-btn">STAMPA PARZ.</a>';
+    echo '</div>';
+    echo '</div>';
+
+    echo '<div>';
+    echo '<h3 class="admin-group-title">STAMPANTE SELEZIONATA: Stampante TLP2844 - Cartoncini a strappo</h3>';
+    echo '<div class="admin-btn-row">';
+    echo '<a href="stampante_continua.php" class="opzione-btn">STAMPANTE CONTINUA</a>';
+    echo '<a href="index.php" class="opzione-btn">CONTINUA ORDINE</a>';
+    echo '</div>';
+    echo '</div>';
+
+    echo '<div>';
+    echo '<h3 class="admin-group-title">DB attuale: Coro Valsassq19</h3>';
+    echo '<div class="admin-btn-row">';
+    echo '<a href="?action=db&db=ProtCivCrem19" class="opzione-btn">PROTCIVCREM19</a>';
+    echo '</div>';
+    echo '</div>';
+
+    echo '</section>';
+}
+
+// Schermata stampa
+function mostraSchermataStampa()
+{
+    global $mysqli;
+    $id_cassa = ID_CASSA;
+
+    $query = "SELECT totale, id_ordine FROM ordini WHERE id_cassa = $id_cassa AND chiuso = '0'";
+    $ris = mysql_query_safe($mysqli, $query);
+
+    if (mysqli_num_rows($ris) == 0)
+    {
+        echo '<div style="text-align:center;margin-top:60px;">';
+        echo '<p style="font-size:24px;font-weight:800;color:#8c9ba5;margin-bottom:40px;">NESSUN BIGLIETTO DA STAMPARE</p>';
+        echo '<a href="index.php" class="opzione-btn" style="text-decoration:none;padding:20px 40px;display:inline-block;">NUOVO ORDINE</a>';
+        echo '</div>';
+        return;
+    }
+
+    $riga = mysqli_fetch_array($ris);
+    $totale = (float)$riga['totale'];
+    $pagato = isset($_GET['pagato']) ? (float)$_GET['pagato'] : 0;
+    $metodo = isset($_GET['metodo']) ? $_GET['metodo'] : '';
+    $resto = max(0, $pagato - $totale);
+
+    $totale_fmt = number_format($totale, 2, ',', '.');
+    $pagato_fmt = number_format($pagato, 2, ',', '.');
+    $resto_fmt = number_format($resto, 2, ',', '.');
+    $base_url = '?action=s';
+
+    echo '<header class="stampa-header">';
+    echo '<h1>TOTALE ORDINE: &euro; ' . $totale_fmt . '</h1>';
+    echo '</header>';
+
+    echo '<section class="stampa-section">';
+
+    // BANCONOTE
+    echo '<p class="gruppo-titolo"><span class="gruppo-titolo-icona">💶</span> BANCONOTE</p>';
+    echo '<div class="banconote-grid">';
+    $banconote = array(5, 10, 20, 50, 100, 200, 500);
+    foreach ($banconote as $val)
+    {
+        $nuovo_pagato = $pagato + $val;
+        $img_file = 'soldi/' . $val . '_euro.png';
+        echo '<a href="' . $base_url . '&pagato=' . $nuovo_pagato . '&metodo=' . $metodo . '" class="banconota-btn">';
+        echo '<img src="' . $img_file . '" alt="' . $val . '€">';
+        echo '<span class="valore">' . $val . '€</span></a>';
+    }
+    echo '</div>';
+
+    // MONETE
+    echo '<p class="gruppo-titolo"><span class="gruppo-titolo-icona">🪙</span> MONETE</p>';
+    echo '<div class="monete-grid">';
+    $monete = array(2, 1, 0.50, 0.20, 0.10, 0.05, 0.01);
+    foreach ($monete as $val)
+    {
+        $nuovo_pagato = $pagato + $val;
+        $label = $val >= 1 ? $val . '€' : ($val * 100) . 'c';
+        $img_file = 'soldi/' . ($val >= 1 ? $val : ($val * 100) . 'c') . '_euro.png';
+        $classe_rame = ($val <= 0.05) ? ' moneta-rame' : '';
+        echo '<a href="' . $base_url . '&pagato=' . $nuovo_pagato . '&metodo=' . $metodo . '" class="moneta-btn' . $classe_rame . '">';
+        echo '<img src="' . $img_file . '" alt="' . $label . '">';
+        echo '<span class="valore">' . $label . '</span></a>';
+    }
+    echo '</div>';
+
+    <!-- METODO DI PAGAMENTO -->
+    echo '<p class="metodo-titolo">METODO DI PAGAMENTO</p>';
+    echo '<div class="metodo-grid">';
+    $attivo_contanti = ($metodo == 'contanti') ? ' attivo' : '';
+    $attivo_carta = ($metodo == 'carta') ? ' attivo' : '';
+    echo '<a href="' . $base_url . '&pagato=' . $pagato . '&metodo=contanti" class="metodo-btn' . $attivo_contanti . '">';
+    echo '<span class="metodo-btn-icona">💵</span>';
+    echo '<span class="metodo-btn-label">CONTANTI</span></a>';
+    echo '<a href="' . $base_url . '&pagato=' . $pagato . '&metodo=carta" class="metodo-btn' . $attivo_carta . '">';
+    echo '<span class="metodo-btn-icona">💳</span>';
+    echo '<span class="metodo-btn-label">CARTA DI CREDITO</span></a>';
+    echo '</div>';
+
+    echo '</section>';
+
+    <!-- Footer con PAGATO / TOTALE / RESTO -->
+    echo '<div class="stampa-footer">';
+    echo '<div class="stampa-footer-campo">';
+    echo '<label>PAGATO</label>';
+    echo '<input type="text" value="€ ' . $pagato_fmt . '" readonly>';
+    echo '</div>';
+    echo '<div class="stampa-footer-campo">';
+    echo '<label>TOTALE</label>';
+    echo '<input type="text" value="€ ' . $totale_fmt . '" readonly>';
+    echo '</div>';
+    echo '<div class="stampa-footer-campo">';
+    echo '<label>RESTO</label>';
+    echo '<input type="text" value="€ ' . $resto_fmt . '" readonly>';
+    echo '</div>';
+    echo '<div class="stampa-footer-spacer"></div>';
+    echo '<a href="' . $base_url . '&pagato=0" class="stampa-close-btn">✕</a>';
+    echo '</div>';
 }

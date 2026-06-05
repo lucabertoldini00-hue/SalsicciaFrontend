@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace - Stampa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ── Stampa: stili specifici ── */
+
+        .stampa-header h1 {
+            font-size: 24px;
+            font-weight: 900;
+            color: #2b3d4e;
+            margin: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+            letter-spacing: 0.3px;
+        }
+
+        .stampa-section {
+            width: 100%;
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Titoli gruppi banconote/monete */
+        .gruppo-titolo {
+            font-size: 13px;
+            font-weight: 800;
+            color: #5a6b7c;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .gruppo-titolo-icona {
+            font-size: 16px;
+        }
+
+        /* Griglia banconote */
+        .banconote-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .banconota-btn {
+            width: 100px;
+            height: 72px;
+            background-color: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 4px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .banconota-btn img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .banconota-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .banconota-btn:active {
+            transform: scale(0.96);
+        }
+
+        .banconota-btn .valore {
+            font-size: 12px;
+            font-weight: 800;
+            color: #2b3d4e;
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 1px 6px;
+            border-radius: 3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Griglia monete */
+        .monete-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .moneta-btn {
+            width: 80px;
+            height: 80px;
+            background-color: transparent;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .moneta-btn img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .moneta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        .moneta-btn:active {
+            transform: scale(0.94);
+        }
+
+        .moneta-btn .valore {
+            font-size: 14px;
+            font-weight: 800;
+            color: #5a4a20;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 4px rgba(255,255,255,0.8);
+        }
+
+        .moneta-btn.moneta-rame {
+            background-color: #c9956a;
+            border-color: #a87548;
+        }
+
+        .moneta-btn.moneta-rame .valore {
+            color: #5a3518;
+        }
+
+        /* Metodo di pagamento */
+        .metodo-titolo {
+            font-size: 13px;
+            font-weight: 800;
+            color: #5a6b7c;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .metodo-grid {
+            display: flex;
+            gap: 16px;
+        }
+
+        .metodo-btn {
+            flex: 1;
+            background-color: #ffffff;
+            border: 1px solid #dcdfe6;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s;
+        }
+
+        .metodo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .metodo-btn:active {
+            transform: translateY(0);
+        }
+
+        .metodo-btn.attivo {
+            border-color: #2b3d4e;
+            background-color: #f0f2f5;
+        }
+
+        .metodo-btn-icona {
+            font-size: 28px;
+            color: #2b3d4e;
+        }
+
+        .metodo-btn-label {
+            font-size: 14px;
+            font-weight: 800;
+            color: #2b3d4e;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Footer stampa con PAGATO / TOTALE / RESTO */
+        .stampa-footer {
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #dcdfe6;
+        }
+
+        .stampa-footer-campo {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stampa-footer-campo label {
+            font-size: 13px;
+            font-weight: 800;
+            color: #8c9ba5;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stampa-footer-campo input {
+            width: 120px;
+            height: 54px;
+            border: 1px solid #dcdfe6;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: #2b3d4e;
+            font-size: 22px;
+            font-weight: 800;
+            text-align: center;
+            outline: none;
+        }
+
+        .stampa-footer-spacer {
+            flex-grow: 1;
+        }
+
+        .stampa-close-btn {
+            width: 56px;
+            height: 54px;
+            background-color: #e54b3c;
+            border: none;
+            border-radius: 50%;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+
+        .stampa-close-btn:hover {
+            opacity: 0.9;
+        }
+
+        .stampa-close-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <nav>
+            <button><span id="button-text">SAKE</span></button>
+            <button><span id="button-text"></span> FRUTTATI INVEC.</button>
+            <button> JUNMAI</button>
+        </nav>
+        <header class="stampa-header">
+            <h1>TOTALE ORDINE: € 3,00</h1>
+        </header>
+        <section class="stampa-section">
+
+            <!-- BANCONOTE -->
+            <p class="gruppo-titolo"><span class="gruppo-titolo-icona">💶</span> BANCONOTE</p>
+            <div class="banconote-grid">
+                <button class="banconota-btn" onclick="aggiungiPagato(5)">
+                    <img src="soldi/5_euro.png" alt="5€">
+                    <span class="valore">5€</span>
+                </button>
+                <button class="banconota-btn" onclick="aggiungiPagato(10)">
+                    <img src="soldi/10_euro.png" alt="10€">
+                    <span class="valore">10€</span>
+                </button>
+                <button class="banconota-btn" onclick="aggiungiPagato(20)">
+                    <img src="soldi/20_euro.png" alt="20€">
+                    <span class="valore">20€</span>
+                </button>
+                <button class="banconota-btn" onclick="aggiungiPagato(50)">
+                    <img src="soldi/50_euro.png" alt="50€">
+                    <span class="valore">50€</span>
+                </button>
+                <button class="banconota-btn" onclick="aggiungiPagato(100)">
+                    <img src="soldi/100_euro.png" alt="100€">
+                    <span class="valore">100€</span>
+                </button>
+                <button class="banconota-btn" onclick="aggiungiPagato(200)">
+                    <img src="soldi/200_euro.png" alt="200€">
+                    <span class="valore">200€</span>
+                </button>
+                <button class="banconota-btn" onclick="aggiungiPagato(500)">
+                    <img src="soldi/500_euro.png" alt="500€">
+                    <span class="valore">500€</span>
+                </button>
+            </div>
+
+            <!-- MONETE -->
+            <p class="gruppo-titolo"><span class="gruppo-titolo-icona">🪙</span> MONETE</p>
+            <div class="monete-grid">
+                <button class="moneta-btn" onclick="aggiungiPagato(2)">
+                    <img src="soldi/2_euro.png" alt="2€">
+                    <span class="valore">2€</span>
+                </button>
+                <button class="moneta-btn" onclick="aggiungiPagato(1)">
+                    <img src="soldi/1_euro.png" alt="1€">
+                    <span class="valore">1€</span>
+                </button>
+                <button class="moneta-btn" onclick="aggiungiPagato(0.50)">
+                    <img src="soldi/50c_euro.png" alt="50c">
+                    <span class="valore">50c</span>
+                </button>
+                <button class="moneta-btn" onclick="aggiungiPagato(0.20)">
+                    <img src="soldi/20c_euro.png" alt="20c">
+                    <span class="valore">20c</span>
+                </button>
+                <button class="moneta-btn" onclick="aggiungiPagato(0.10)">
+                    <img src="soldi/10c_euro.png" alt="10c">
+                    <span class="valore">10c</span>
+                </button>
+                <button class="moneta-btn moneta-rame" onclick="aggiungiPagato(0.05)">
+                    <img src="soldi/5c_euro.png" alt="5c">
+                    <span class="valore">5c</span>
+                </button>
+                <button class="moneta-btn moneta-rame" onclick="aggiungiPagato(0.01)">
+                    <img src="soldi/1c_euro.png" alt="1c">
+                    <span class="valore">1c</span>
+                </button>
+            </div>
+
+            <!-- METODO DI PAGAMENTO -->
+            <p class="metodo-titolo">METODO DI PAGAMENTO</p>
+            <div class="metodo-grid">
+                <button class="metodo-btn" id="metodo-contanti" onclick="selezionaMetodo('contanti')">
+                    <span class="metodo-btn-icona">💵</span>
+                    <span class="metodo-btn-label">CONTANTI</span>
+                </button>
+                <button class="metodo-btn" id="metodo-carta" onclick="selezionaMetodo('carta')">
+                    <span class="metodo-btn-icona">💳</span>
+                    <span class="metodo-btn-label">CARTA DI CREDITO</span>
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Footer con PAGATO / TOTALE / RESTO e bottone chiudi -->
+        <div class="stampa-footer">
+            <div class="stampa-footer-campo">
+                <label>PAGATO</label>
+                <input type="text" id="pagato-input" value="0.00" readonly>
+            </div>
+            <div class="stampa-footer-campo">
+                <label>TOTALE</label>
+                <input type="text" id="totale-input" value="3.00" readonly>
+            </div>
+            <div class="stampa-footer-campo">
+                <label>RESTO</label>
+                <input type="text" id="resto-input" value="0.00" readonly>
+            </div>
+            <div class="stampa-footer-spacer"></div>
+            <button class="stampa-close-btn" onclick="chiudiStampa()">✕</button>
+        </div>
+    </main>
+    <aside>
+        <header>
+            <h2>RIEPILOGO ORDINE</h2>
+            <div class="order-summary-box">
+                <div class="order-number">ORDINE #261</div>
+                <div class="order-total">
+                    <h3>TOTALE DA PAGARE</h3>
+                    <h1 class="item-cost">€ 0,00</h1>
+                </div>
+            </div>
+            <div class="aside-actions">
+                <button class="aside-btn">🖊️ Modifica Ordine</button>
+                <button class="aside-btn">⚙️ Opzioni</button>
+            </div>
+        </header>
+        <section id="riepilogo-prodotti-section">
+            <h3>RIEPILOGO PRODOTTI</h3>
+            <div class="cart-item">
+                <span class="item-desc">Nessun prodotto nell'ordine</span>
+            </div>
+        </section>
+    </aside>
+
+    <script>
+        var pagato = 0;
+        var totale = 3.00;
+
+        function aggiungiPagato(importo) {
+            pagato += importo;
+            // Arrotonda per evitare errori floating point
+            pagato = Math.round(pagato * 100) / 100;
+            var resto = pagato - totale;
+            if (resto < 0) resto = 0;
+            resto = Math.round(resto * 100) / 100;
+
+            document.getElementById('pagato-input').value = pagato.toFixed(2);
+            document.getElementById('resto-input').value = resto.toFixed(2);
+        }
+
+        function selezionaMetodo(metodo) {
+            // Rimuovi classe attivo da tutti
+            document.getElementById('metodo-contanti').classList.remove('attivo');
+            document.getElementById('metodo-carta').classList.remove('attivo');
+            // Aggiungi al selezionato
+            if (metodo === 'contanti') {
+                document.getElementById('metodo-contanti').classList.add('attivo');
+            } else {
+                document.getElementById('metodo-carta').classList.add('attivo');
+            }
+        }
+
+        function chiudiStampa() {
+            // Torna alla pagina principale
+            location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
