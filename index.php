@@ -4,6 +4,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 $showModifica = $action == 'm';
 $showOpzioni = $action == 'o';
 $showConfig = $action == 'c';
+$showAdmin = $action == 'c' && isset($_GET['ok']) && isset($_GET['code']) && $_GET['code'] == '@123*';
+$showStampa = $action == 's';
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +18,14 @@ $showConfig = $action == 'c';
 </head>
 <body>
     <main>
-        <?php if ($showModifica): ?>
+        <?php if ($showAdmin): ?>
+            <nav><?php mostraNavCategorie(); ?><?php mostraIndicatoreTipo(); ?></nav>
+            <header><h1>PANNELLO ADMIN</h1></header>
+            <?php mostraPannelloAdmin(); ?>
+        <?php elseif ($showStampa): ?>
+            <nav><?php mostraNavCategorie(); ?><?php mostraIndicatoreTipo(); ?></nav>
+            <?php mostraSchermataStampa(); ?>
+        <?php elseif ($showModifica): ?>
             <nav><?php mostraNavCategorie(); ?><?php mostraIndicatoreTipo(); ?></nav>
             <header><h1>MODIFICA ORDINE</h1></header>
             <?php mostraModificaOrdine(); ?>
@@ -39,7 +48,7 @@ $showConfig = $action == 'c';
             <div class="order-summary-box"><?php mostraBoxRiepilogo(); ?></div>
             <div class="aside-actions"><?php mostraAzioniLaterali(); ?></div>
         </header>
-        <?php if ($showConfig): ?>
+        <?php if ($showConfig && !$showAdmin): ?>
             <section style="flex-grow:1;"><?php mostraPannelloConfig(); ?></section>
         <?php else: ?>
             <section>
