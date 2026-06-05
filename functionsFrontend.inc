@@ -537,7 +537,7 @@ function mostraPannelloAdmin()
     echo '</section>';
 }
 
-// Schermata stampa
+// Stampa
 function mostraSchermataStampa()
 {
     global $mysqli;
@@ -572,21 +572,32 @@ function mostraSchermataStampa()
 
     echo '<section class="stampa-section">';
 
-    // BANCONOTE
+    //Banconote
     echo '<p class="gruppo-titolo"><span class="gruppo-titolo-icona">💶</span> BANCONOTE</p>';
     echo '<div class="banconote-grid">';
-    $banconote = array(5, 10, 20, 50, 100, 200, 500);
-    foreach ($banconote as $val)
+    echo '<div class="banconote-riga banconote-riga-1">';
+    $banconote_1 = array(5, 10, 20, 50);
+    foreach ($banconote_1 as $val)
     {
         $nuovo_pagato = $pagato + $val;
         $img_file = 'soldi/' . $val . '_euro.png';
-        echo '<a href="' . $base_url . '&pagato=' . $nuovo_pagato . '&metodo=' . $metodo . '" class="banconota-btn">';
-        echo '<img src="' . $img_file . '" alt="' . $val . '€">';
-        echo '<span class="valore">' . $val . '€</span></a>';
+        echo '<button onclick="window.location.href=\'' . $base_url . '&pagato=' . $nuovo_pagato . '&metodo=' . $metodo . '\'" class="banconota-btn" style="background-image:url(\'' . $img_file . '\')">';
+        echo '<span class="valore">' . $val . '€</span></button>';
     }
     echo '</div>';
+    echo '<div class="banconote-riga banconote-riga-2">';
+    $banconote_2 = array(100, 200, 500);
+    foreach ($banconote_2 as $val)
+    {
+        $nuovo_pagato = $pagato + $val;
+        $img_file = 'soldi/' . $val . '_euro.png';
+        echo '<button onclick="window.location.href=\'' . $base_url . '&pagato=' . $nuovo_pagato . '&metodo=' . $metodo . '\'" class="banconota-btn" style="background-image:url(\'' . $img_file . '\')">';
+        echo '<span class="valore">' . $val . '€</span></button>';
+    }
+    echo '</div>';
+    echo '</div>';
 
-    // MONETE
+    //monete
     echo '<p class="gruppo-titolo"><span class="gruppo-titolo-icona">🪙</span> MONETE</p>';
     echo '<div class="monete-grid">';
     $monete = array(2, 1, 0.50, 0.20, 0.10, 0.05, 0.01);
@@ -596,29 +607,29 @@ function mostraSchermataStampa()
         $label = $val >= 1 ? $val . '€' : ($val * 100) . 'c';
         $img_file = 'soldi/' . ($val >= 1 ? $val : ($val * 100) . 'c') . '_euro.png';
         $classe_rame = ($val <= 0.05) ? ' moneta-rame' : '';
-        echo '<a href="' . $base_url . '&pagato=' . $nuovo_pagato . '&metodo=' . $metodo . '" class="moneta-btn' . $classe_rame . '">';
-        echo '<img src="' . $img_file . '" alt="' . $label . '">';
-        echo '<span class="valore">' . $label . '</span></a>';
+        echo '<button onclick="window.location.href=\'' . $base_url . '&pagato=' . $nuovo_pagato . '&metodo=' . $metodo . '\'" class="moneta-btn' . $classe_rame . '" style="background-image:url(\'' . $img_file . '\')">';
+        echo '<span class="valore">' . $label . '</span></button>';
     }
     echo '</div>';
 
-    //METODO DI PAGAMENTO
-    echo '<p class="metodo-titolo">METODO DI PAGAMENTO</p>';
+    //metodo pagamento
+    echo '<p class="metodo-titolo">STAMPA SCONTRINO FISCALE, METODO DI PAGAMENTO:</p>';
     echo '<div class="metodo-grid">';
     $attivo_contanti = ($metodo == 'contanti') ? ' attivo' : '';
     $attivo_carta = ($metodo == 'carta') ? ' attivo' : '';
-    echo '<a href="' . $base_url . '&pagato=' . $pagato . '&metodo=contanti" class="metodo-btn' . $attivo_contanti . '">';
+    echo '<button onclick="window.location.href=\'' . $base_url . '&pagato=' . $pagato . '&metodo=contanti\'" class="metodo-btn' . $attivo_contanti . '">';
     echo '<span class="metodo-btn-icona">💵</span>';
-    echo '<span class="metodo-btn-label">CONTANTI</span></a>';
-    echo '<a href="' . $base_url . '&pagato=' . $pagato . '&metodo=carta" class="metodo-btn' . $attivo_carta . '">';
+    echo '<span class="metodo-btn-label">CONTANTI</span></button>';
+    echo '<button onclick="window.location.href=\'' . $base_url . '&pagato=' . $pagato . '&metodo=carta\'" class="metodo-btn' . $attivo_carta . '">';
     echo '<span class="metodo-btn-icona">💳</span>';
-    echo '<span class="metodo-btn-label">CARTA DI CREDITO</span></a>';
+    echo '<span class="metodo-btn-label">CARTA DI CREDITO</span></button>';
     echo '</div>';
 
-    echo '</section>';
+    echo '<div style="text-align:center;"><button onclick="window.location.href=\'index.php\'" class="opzione-btn" style="padding:16px 40px;display:inline-flex;">NUOVO ORDINE</button></div>';
 
-    //Footer con PAGATO / TOTALE / RESTO
+    //Footer PAGATO-TOTALE-RESTO
     echo '<div class="stampa-footer">';
+    echo '<button onclick="window.location.href=\'' . $base_url . '&pagato=0\'" class="stampa-close-btn">✕</button>';
     echo '<div class="stampa-footer-campo">';
     echo '<label>PAGATO</label>';
     echo '<input type="text" value="€ ' . $pagato_fmt . '" readonly>';
@@ -631,7 +642,7 @@ function mostraSchermataStampa()
     echo '<label>RESTO</label>';
     echo '<input type="text" value="€ ' . $resto_fmt . '" readonly>';
     echo '</div>';
-    echo '<div class="stampa-footer-spacer"></div>';
-    echo '<a href="' . $base_url . '&pagato=0" class="stampa-close-btn">✕</a>';
     echo '</div>';
+
+    echo '</section>';
 }
