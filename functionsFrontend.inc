@@ -602,7 +602,7 @@ function mostraSchermataStampa()
     }
     echo '</div>';
 
-    <!-- METODO DI PAGAMENTO -->
+    //METODO DI PAGAMENTO
     echo '<p class="metodo-titolo">METODO DI PAGAMENTO</p>';
     echo '<div class="metodo-grid">';
     $attivo_contanti = ($metodo == 'contanti') ? ' attivo' : '';
@@ -617,7 +617,7 @@ function mostraSchermataStampa()
 
     echo '</section>';
 
-    <!-- Footer con PAGATO / TOTALE / RESTO -->
+    //Footer con PAGATO / TOTALE / RESTO
     echo '<div class="stampa-footer">';
     echo '<div class="stampa-footer-campo">';
     echo '<label>PAGATO</label>';

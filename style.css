@@ -677,6 +677,8 @@ span.item-cost {
     color: #e54b3c;
 }
 
+/* ── Stampa: stili specifici ── */
+
 .stampa-header h1 {
     font-size: 24px;
     font-weight: 900;
@@ -696,6 +698,7 @@ span.item-cost {
     gap: 20px;
 }
 
+/* Titoli gruppi banconote/monete */
 .gruppo-titolo {
     font-size: 13px;
     font-weight: 800;
@@ -708,6 +711,11 @@ span.item-cost {
     margin: 0;
 }
 
+.gruppo-titolo-icona {
+    font-size: 16px;
+}
+
+/* Griglia banconote */
 .banconote-grid {
     display: flex;
     flex-wrap: wrap;
@@ -720,18 +728,35 @@ span.item-cost {
     background-color: transparent;
     border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 6px;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
     padding: 4px;
+    position: relative;
+    overflow: hidden;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     text-decoration: none;
+}
+
+.banconota-btn img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
 .banconota-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.banconota-btn:active {
+    transform: scale(0.96);
 }
 
 .banconota-btn .valore {
@@ -741,8 +766,11 @@ span.item-cost {
     background-color: rgba(255, 255, 255, 0.85);
     padding: 1px 6px;
     border-radius: 3px;
+    position: relative;
+    z-index: 1;
 }
 
+/* Griglia monete */
 .monete-grid {
     display: flex;
     flex-wrap: wrap;
@@ -752,14 +780,28 @@ span.item-cost {
 .moneta-btn {
     width: 80px;
     height: 80px;
-    background-color: #c9956a;
+    background-color: transparent;
+    border: none;
     border-radius: 50%;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    position: relative;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     text-decoration: none;
+}
+
+.moneta-btn img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .moneta-btn:hover {
@@ -767,13 +809,29 @@ span.item-cost {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
+.moneta-btn:active {
+    transform: scale(0.94);
+}
+
 .moneta-btn .valore {
     font-size: 14px;
     font-weight: 800;
     color: #5a4a20;
+    position: relative;
+    z-index: 1;
     text-shadow: 0 0 4px rgba(255,255,255,0.8);
 }
 
+.moneta-btn.moneta-rame {
+    background-color: #c9956a;
+    border-color: #a87548;
+}
+
+.moneta-btn.moneta-rame .valore {
+    color: #5a3518;
+}
+
+/* Metodo di pagamento */
 .metodo-titolo {
     font-size: 13px;
     font-weight: 800;
@@ -794,12 +852,13 @@ span.item-cost {
     border: 1px solid #dcdfe6;
     border-radius: 8px;
     padding: 20px;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s;
     text-decoration: none;
 }
 
@@ -808,16 +867,22 @@ span.item-cost {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
 }
 
+.metodo-btn:active {
+    transform: translateY(0);
+}
+
 .metodo-btn.attivo {
     border-color: #2b3d4e;
     background-color: #f0f2f5;
 }
 
-.metodo-btn .metodo-btn-icona {
+.metodo-btn-icona {
     font-size: 28px;
+    line-height: 1;
+    color: #2b3d4e;
 }
 
-.metodo-btn .metodo-btn-label {
+.metodo-btn-label {
     font-size: 14px;
     font-weight: 800;
     color: #2b3d4e;
@@ -825,6 +890,7 @@ span.item-cost {
     letter-spacing: 0.3px;
 }
 
+/* Footer stampa con PAGATO / TOTALE / RESTO */
 .stampa-footer {
     display: flex;
     align-items: flex-end;
@@ -848,7 +914,7 @@ span.item-cost {
     letter-spacing: 0.5px;
 }
 
-.stampa-footer-campo .stampa-valore {
+.stampa-footer-campo input {
     width: 120px;
     height: 54px;
     border: 1px solid #dcdfe6;
@@ -859,9 +925,6 @@ span.item-cost {
     font-weight: 800;
     text-align: center;
     outline: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .stampa-footer-spacer {
@@ -877,6 +940,7 @@ span.item-cost {
     color: #ffffff;
     font-size: 22px;
     font-weight: bold;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
