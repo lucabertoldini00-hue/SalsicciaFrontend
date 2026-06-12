@@ -164,6 +164,30 @@ function gestisciAzioni()
         header("Location: ?action=o");
         exit;
     }
+
+    if ($action == 'sb') // set ordine in standby
+    {
+        $query = "SELECT id_ordine FROM ordini WHERE id_cassa = $id_cassa AND chiuso = '0'";
+        $ris = mysql_query_safe($mysqli, $query);
+        if (mysqli_num_rows($ris) == 1)
+        {
+            $riga = mysqli_fetch_array($ris);
+            $id_ordine = $riga['id_ordine'];
+            $query = "UPDATE ordini SET chiuso = 'S' WHERE id_ordine = $id_ordine";
+            mysql_query_safe($mysqli, $query);
+        }
+        header("Location: index.php");
+        exit;
+    }
+
+    if ($action == 'ra' && isset($HTTP_GET_VARS['id'])) // reactivate da standby
+    {
+        $id_ordine = (int)$HTTP_GET_VARS['id'];
+        $query = "UPDATE ordini SET chiuso = '0' WHERE id_ordine = $id_ordine";
+        mysql_query_safe($mysqli, $query);
+        header("Location: index.php");
+        exit;
+    }
 }
 
 // pulsanti categorie
@@ -368,8 +392,51 @@ function mostraOpzioni()
     echo '</div>';
     echo '<div class="opzioni-row-2">';
     echo '<a href="?action=st&t=nor" class="opzione-btn opzione-btn-large" style="text-decoration:none">NORMALE</a>';
-    echo '<span class="opzione-btn opzione-btn-large" style="opacity:0.5;cursor:default">STAND BY</span>';
+    echo '<a href="?action=sb" class="opzione-btn opzione-btn-large" style="text-decoration:none">STAND BY</a>';
     echo '</div>';
+    echo '</section>';
+}
+
+function mostraOrdiniStandby()
+{
+    global $mysqli;
+
+    $query = "SELECT * FROM ordini WHERE chiuso = 'S'";
+    $ris = mysql_query_safe($mysqli, $query);
+
+    echo '<section class="standby-section">';
+
+    if (mysqli_num_rows($ris) > 0)
+    {
+        echo '<table class="standby-table">';
+        echo '<thead><tr>';
+        echo '<th>Ordine n.</th>';
+        echo '<th>Data</th>';
+        echo '<th>Totale</th>';
+        echo '<th>Act.</th>';
+        echo '</tr></thead>';
+        echo '<tbody>';
+
+        while ($riga = mysqli_fetch_array($ris))
+        {
+            $data = date('d/m/Y H:i:s', strtotime($riga['data_ora']));
+            $totale = number_format($riga['totale'], 2, ',', '.') . '&euro;';
+            echo '<tr>';
+            echo "<td>{$riga['id_ordine']}</td>";
+            echo "<td>{$data}</td>";
+            echo "<td>{$totale}</td>";
+            echo '<td><a href="?action=ra&id=' . $riga['id_ordine'] . '" class="standby-attiva-btn">&#9998;</a></td>';
+            echo '</tr>';
+        }
+
+        echo '</tbody>';
+        echo '</table>';
+    }
+    else
+    {
+        echo '<p class="standby-empty">Nessun ordine in standby</p>';
+    }
+
     echo '</section>';
 }
 
@@ -580,7 +647,7 @@ function mostraSchermataStampa()
     foreach ($banconote_1 as $val)
     {
         $nuovo_pagato = $pagato + $val;
-        $img_file = 'soldi/' . $val . '_euro.png';
+        $img_file = 'asset/soldi/' . $val . '_euro.png';
         echo '<button onclick="window.location.href=\'' . $base_url . '&pagato=' . $nuovo_pagato . '&metodo=' . $metodo . '\'" class="banconota-btn" style="background-image:url(\'' . $img_file . '\')">';
         echo '<span class="valore">' . $val . '€</span></button>';
     }
@@ -590,7 +657,7 @@ function mostraSchermataStampa()
     foreach ($banconote_2 as $val)
     {
         $nuovo_pagato = $pagato + $val;
-        $img_file = 'soldi/' . $val . '_euro.png';
+        $img_file = 'asset/soldi/' . $val . '_euro.png';
         echo '<button onclick="window.location.href=\'' . $base_url . '&pagato=' . $nuovo_pagato . '&metodo=' . $metodo . '\'" class="banconota-btn" style="background-image:url(\'' . $img_file . '\')">';
         echo '<span class="valore">' . $val . '€</span></button>';
     }
@@ -605,7 +672,7 @@ function mostraSchermataStampa()
     {
         $nuovo_pagato = $pagato + $val;
         $label = $val >= 1 ? $val . '€' : ($val * 100) . 'c';
-        $img_file = 'soldi/' . ($val >= 1 ? $val : ($val * 100) . 'c') . '_euro.png';
+        $img_file = 'asset/soldi/' . ($val >= 1 ? $val : ($val * 100) . 'c') . '_euro.png';
         $classe_rame = ($val <= 0.05) ? ' moneta-rame' : '';
         echo '<button onclick="window.location.href=\'' . $base_url . '&pagato=' . $nuovo_pagato . '&metodo=' . $metodo . '\'" class="moneta-btn' . $classe_rame . '" style="background-image:url(\'' . $img_file . '\')">';
         echo '<span class="valore">' . $label . '</span></button>';
